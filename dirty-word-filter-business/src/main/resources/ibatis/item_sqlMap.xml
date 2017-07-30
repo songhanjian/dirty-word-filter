@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="item_sqlMap">
+    <resultMap id="item_map" class="com.dirty.word.filter.model.Item">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="author" column="author" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="topic" column="topic" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="dirtyWords" column="dirty_words" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="query_all" resultMap="item_map">
+        select * from item;
+    </select>
+
+    <select id="query_by_category" resultMap="item_map" parameterClass="Integer">
+        select * from item where category_id = #categoryId#
+    </select>
+
+    <select id="query_by_state" resultMap="item_map" parameterClass="Integer">
+        select * from item where state=#state#;
+    </select>
+
+    <select id="query_by_state_category" resultMap="item_map" parameterClass="java.util.Map">
+        select * from item where state = #state# and category_id=#categoryId#;
+    </select>
+
+    <insert id="insert_item" parameterClass="com.dirty.word.filter.model.Item">
+        insert item (`id`,`num`,`state`,`author`,`date`,`topic`,`content`,`dirty_words`,`category_id`) values (#id#,#num#,#state#,#author#,#date#,#topic#,#content#,#dirtyWords#,#categoryId#);
+    </insert>
+
+    <select id="query_item_exist" parameterClass="Integer" resultClass="java.lang.Integer">
+        select count(*) from item where num=#num#;
+    </select>
+</sqlMap>
